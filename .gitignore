@@ -1,6 +1,13 @@
-keystore.properties
-*.jks
-keystore.properties
-*.jks
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
 keystore.properties
 *.jks
