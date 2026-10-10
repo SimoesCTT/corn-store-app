@@ -14,7 +14,13 @@ object ApkInstaller {
         withContext(Dispatchers.IO) {
             try {
                 val dir = File(context.cacheDir, "apks").apply { mkdirs() }
-                val out = File(dir, fileName)
+                // Unique filename per URL so cached APKs don't collide
+                val safeName = fileName.ifBlank { "app.apk" }
+                    .replace("[^A-Za-z0-9._-]".toRegex(), "_")
+                val key = Integer.toHexString(url.hashCode())
+                val out = File(dir, "${key}_$safeName")
+
+                // If a cached APK is complete, reuse it — but only if it's from THIS url
                 if (out.exists() && out.length() > 0) return@withContext out
 
                 val conn = (URL(url).openConnection() as HttpURLConnection).apply {
